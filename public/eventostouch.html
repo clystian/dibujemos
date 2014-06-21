@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Combinando eventos Touch</title>
+    <meta charset="utf-8" />
+    <script>
+       function inicia(){
+          var xIni;
+          var yIni;
+          var canvas = document.getElementById('objeto');
+          canvas.addEventListener('touchstart', function(e){
+              if (e.targetTouches.length == 1) { 
+          var touch = e.targetTouches[0]; 
+          xIni = touch.pageX;
+          yIni = touch.pageY;
+       }
+          }, false);
+          
+          canvas.addEventListener('touchmove', function(e){
+              if (e.targetTouches.length == 1) { 
+          var touch = e.targetTouches[0]; 
+          if((touch.pageX>xIni+20) && (touch.pageY> yIni-5) && (touch.pageY<yIni+5)){
+             alert("el swipe se genera hacia la izquierda");
+          }
+          
+          if((touch.pageX<xIni-20) && (touch.pageY> yIni-5) && (touch.pageY<yIni+5)){
+             alert("el swipe se genera hacia la derecha");
+          } 
+       }
+          }, false); 
+          
+                     
+       }
+    </script>
+</head>
+    <body onLoad="inicia();">
+      <canvas width="450" height="450" style="border: #000 solid 3px; " id="objeto">
+    </body>
+</html>
