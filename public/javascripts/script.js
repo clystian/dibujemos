@@ -1,10 +1,26 @@
 $(function(){
+  // get viewport size
+  function getViewportSize() {
+      return {
+          height: window.innerHeight,
+          width:  window.innerWidth
+      };
+  }
+
+  function resizeHandler(){
+    if(! (viewportInfo==null || viewportInfo==undefined)){
+      var size = {};
+      size= getViewportSize();
+      viewportInfo.text("v: "+size.width+" - h: "+size.height);
+    }
+    console.log("resizeHandler", "viewpoert updated "+"v: "+size.width+" - h: "+size.height);
+  }
 
   if(!('getContext' in document.createElement('canvas'))){
     alert('Lo sentimos, tu navegador no soporta canvas!');
     return false;
   }
-
+  
   var url = 'http://' + window.location.host;
 
   // cache de objetos de jQuery
@@ -13,6 +29,7 @@ $(function(){
   var canvas = $('#paper');
   var instructions = $('#instructions');
   var connections = $('#connections');
+  var viewportInfo = $('#viewportInfo');
   var ctx = canvas[0].getContext('2d');
 
   // id único para la session
@@ -34,9 +51,10 @@ $(function(){
    */
 
   function moveHandler(data) {
+
     if(! (data.id in clients)){
       // le damos un cursor a cada usuario nuestro
-      cursors[data.id] = $('<div class="cursor">').appendTo('#cursors');
+      cursors[data.id] = $('<div class="cursor"><span class="username" style="color:'+data.color+';">'+data.id+'</span></div>').appendTo('#cursors');
     }
 
     // movemos el cursor a su posicion
@@ -84,6 +102,8 @@ $(function(){
       prev.x = e.pageX;
       prev.y = e.pageY;
     }
+
+
   }
 
   function drawLine(fromx, fromy, tox, toy, color){
@@ -113,6 +133,7 @@ $(function(){
   socket.on('connections', connectionHandler);
   canvas.on('mousedown', mousedownHandler);
   doc.on('mousemove', mousemoveHandler);
+  doc.on('ready', resizeHandler);
 
   doc.bind('mouseup mouseleave',function(){
     drawing = false;
@@ -121,9 +142,11 @@ $(function(){
   /**
    * Borramos sessiones viejas
    */
+  var seg=1000;
+  var min=60*seg;
   setInterval(function(){
     for(var ident in clients){
-      if($.now() - clients[ident].updated > 10000){
+      if($.now() - clients[ident].updated > 10*seg){
         cursors[ident].remove();
         delete clients[ident];
         delete cursors[ident];

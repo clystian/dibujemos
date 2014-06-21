@@ -1,3 +1,4 @@
+
 body
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
 *
@@ -12,10 +13,15 @@ body
   width:15px;
   height:22px;
   background:url('../images/pointer.png') no-repeat -4px 0;
+    .username
+      position: relative;
+      bottom: -16px;
+      right: -10px;
 
 canvas
   background: #ddd;
-
+  margin: auto 0;
+  overflow: hidden;
 /*-------------------------
   Instrucciones
 --------------------------*/
@@ -50,6 +56,12 @@ h3
 
 #connections
   position: fixed;
-  top: 0;
-  right: 0;
+  top: 4px;
+  right: 4px;
+  font-size: 18px;
+
+#viewportInfo
+  position: fixed;
+  top: 23px;
+  right: 4px;
   font-size: 18px;
